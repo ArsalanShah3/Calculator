@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root{
+  /* Dark theme defaults */
+  --bg-start: #071226;
+  --bg-end:   #041024;
+  --panel-start: rgba(255,255,255,0.02);
+  --panel-end:   rgba(255,255,255,0.01);
+  --panel-border: rgba(255,255,255,0.03);
+  --surface: rgba(255,255,255,0.015);
+  --text: #e6eef8;
+  --muted: #b7c6d6; /* bumped for better contrast on dark */
+  --accent: #4f81ff; /* bluish */
+  --glass: rgba(255,255,255,0.03);
+  --shadow: rgba(2,6,23,0.6);
+  --ease: cubic-bezier(.2,.9,.2,1);
+}
+
+/* Accessibility utility */
+.sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* Light theme overrides */
+body.light{
+  --bg-start: #f8fafc;
+  --bg-end:   #eef2f7;
+  --panel-start: rgba(255,255,255,1);
+  --panel-end:   rgba(246,249,255,1);
+  --panel-border: rgba(10,20,40,0.04);
+  --surface: rgba(10,20,40,0.02);
+  --text: #061126;
+  --muted: #6b7280;
+  --accent: #0b5fff;
+  --glass: rgba(2,6,23,0.02);
+  --shadow: rgba(6,8,20,0.06);
+}
+
+/* Base layout */
+body{
+  min-height:100vh;
+  background: linear-gradient(180deg,var(--bg-start), var(--bg-end));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3rem 1rem;
+  transition: background-color 260ms var(--ease), color 260ms var(--ease);
+}
+
+/* Card / panel */
+.calculator{
+  width:360px;
+  max-width:95vw;
+  background-color: rgba(255,255,255,0.02); /* translucent base for glass effect */
+  background-image: linear-gradient(180deg, var(--panel-start), var(--panel-end));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius:16px;
+  box-shadow: 0 18px 50px var(--shadow), inset 0 1px 0 var(--surface);
+  overflow:hidden;
+  border:1px solid var(--panel-border);
+} 
+
+/* Small header / branding */
+.calc-header{ display:flex; align-items:center; justify-content:space-between; gap:0.5rem; padding:0.6rem 0.9rem; border-bottom:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+.calc-header .brand{ font-size:0.82rem; color:var(--muted) !important; letter-spacing:0.6px; }
+.brand-strong{ color:var(--accent); font-weight:700; margin-right:0.33rem }
+
+/* Display area */
+.display{
+  padding:1.2rem 1.25rem;
+  background-color: rgba(255,255,255,0.02);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  text-align:right;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+} 
+.history{
+  font-size:0.82rem;
+  color:var(--muted);
+  min-height:20px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.output{
+  font-size:2.25rem;
+  font-weight:700;
+  letter-spacing:0.4px;
+  margin-top:0.25rem;
+  color:var(--text);
+}
+
+/* Grid of buttons */
+.btn-grid{
+  padding:1rem;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:0.6rem;
+  background: linear-gradient(180deg, transparent, var(--surface));
+}
+
+/* Buttons */
+.btn-calc{
+  border-radius:12px;
+  padding:0.82rem 0.6rem;
+  font-size:1.02rem;
+  font-weight:700;
+  border: 1px solid rgba(255,255,255,0.04);
+  background-color: rgba(255,255,255,0.02);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 8px 20px var(--shadow);
+  transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), filter 160ms var(--ease), background 160ms var(--ease);
+  color:var(--text);
+} 
+.btn-calc:hover{ transform: translateY(-3px); filter:brightness(1.03); box-shadow: 0 18px 36px rgba(2,6,23,0.28); }
+.btn-calc:active{ transform: translateY(1px); box-shadow: 0 6px 12px rgba(2,6,23,0.18); }
+.btn-calc:focus{ outline: none; box-shadow: 0 0 0 4px rgba(79,129,255,0.08); }
+.btn-calc:focus-visible{ box-shadow: 0 0 0 4px rgba(79,129,255,0.18); }
+
+/* Variants */
+.btn-num{
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06));
+  color:var(--text);
+}
+.btn-op{
+  background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 65%, black 10%));
+  color: #fff;
+}
+.btn-fn{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+  color:var(--muted);
+}
+
+.btn-wide{ grid-column: span 2 }
+.kbd-hint{ font-size:0.8rem; color:var(--muted); margin-top:0.4rem }
+
+/* Theme toggle */
+.btn.theme-toggle{
+  width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; font-size:16px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  box-shadow: 0 6px 16px rgba(2,6,23,0.12);
+}
+
+/* Dark mode explicit tweaks (ensure contrast) */
+.theme-toggle.is-dark, .btn.theme-toggle:not(.is-light){
+  background: rgba(10,12,18,0.24);
+  border-color: rgba(255,255,255,0.06);
+  color: var(--text);
+}
+
+/* Light mode explicit styles */
+.theme-toggle.is-light,
+body.light .btn.theme-toggle{
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.98));
+  color: var(--accent);
+  border-color: rgba(10,20,40,0.06);
+  box-shadow: 0 6px 16px rgba(10,20,40,0.04);
+}
+
+/* Subtle pressed style */
+.theme-toggle[aria-pressed="true"]{ box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+/* Light tweaks (ensure good contrast) */
+body.light .calculator{
+  background-color: rgba(255,255,255,0.85);
+  background-image: linear-gradient(180deg, var(--panel-start), var(--panel-end));
+  border:1px solid var(--panel-border);
+  box-shadow: 0 10px 28px var(--shadow), inset 0 1px 0 var(--surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+body.light .btn-num{ background: linear-gradient(180deg, #ffffff, #fafbff); color:var(--text); box-shadow: 0 6px 12px rgba(10,20,40,0.04); }
+body.light .btn-op{ background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 70%, black 10%)); color:#fff; }
+body.light .btn-fn{ background: linear-gradient(180deg, #f7f9fc, #ffffff); color:var(--muted); }
+
+/* Footer small */
+footer{ margin-top:0.75rem; text-align:center; color:var(--muted); font-size:0.9rem }
+
+@media (max-width:420px){ .output{ font-size:1.75rem } }

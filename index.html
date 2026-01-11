@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Professional Calculator</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="calculator" role="application" aria-label="Calculator">
+    <div class="calc-header d-flex justify-content-between align-items-center px-3 py-2">
+      <div class="brand small text-uppercase"><span class="brand-strong">Professional</span> Calculator</div>
+      <div class="d-flex align-items-center">
+        
+        <button id="themeToggle" class="btn btn-sm theme-toggle" aria-pressed="false" aria-label="Toggle theme">☾</button>
+      </div>
+    </div>
+    <div class="display">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="history" id="history" aria-hidden="true"></div>
+        <div class="d-flex align-items-center">
+          <div class="kbd-hint me-3"><span class="sr-only">Keys: 0-9 . +-*/ % ( ) Enter Backspace</span></div>
+        </div>
+      </div>
+      <div class="output" id="output" aria-live="polite">0</div>
+    </div>
+
+    <div class="btn-grid">
+      <button class="btn-calc btn-fn" data-action="clear" aria-label="Clear">AC</button>
+      <button class="btn-calc btn-fn" data-action="back" aria-label="Backspace">⌫</button>
+      <button class="btn-calc btn-fn" data-action="percent" aria-label="Percent">%</button>
+      <button class="btn-calc btn-op" data-value="/" aria-label="Divide">÷</button>
+
+      <button class="btn-calc btn-num" data-value="7">7</button>
+      <button class="btn-calc btn-num" data-value="8">8</button>
+      <button class="btn-calc btn-num" data-value="9">9</button>
+      <button class="btn-calc btn-op" data-value="*" aria-label="Multiply">×</button>
+
+      <button class="btn-calc btn-num" data-value="4">4</button>
+      <button class="btn-calc btn-num" data-value="5">5</button>
+      <button class="btn-calc btn-num" data-value="6">6</button>
+      <button class="btn-calc btn-op" data-value="-" aria-label="Subtract">−</button>
+
+      <button class="btn-calc btn-num" data-value="1">1</button>
+      <button class="btn-calc btn-num" data-value="2">2</button>
+      <button class="btn-calc btn-num" data-value="3">3</button>
+      <button class="btn-calc btn-op" data-value="+" aria-label="Add">+</button>
+
+      <button class="btn-calc btn-num btn-wide" data-value="0">0</button>
+      <button class="btn-calc btn-num" data-value=".">.</button>
+      <button class="btn-calc btn-op" data-action="evaluate" aria-label="Equals">=</button>
+    </div>
+
+    <footer aria-hidden="true">
+      <small class="sr-only">Professional Calculator • Built with Bootstrap & Vanilla JS</small>
+    </footer>
+  </div>
+
+  <!-- Bootstrap Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
