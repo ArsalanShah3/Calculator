@@ -53,10 +53,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }catch(err){ output.textContent = 'Error'; expr = ''; console.error(err); }
   };
 
+  // --- Audio feedback (higher, professional click using WebAudio) ---
+  let audioCtx = null;
+  const initAudio = () => {
+    if(audioCtx) return;
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended' && typeof audioCtx.resume === 'function') audioCtx.resume().catch(() => {});
+    } catch(e) { audioCtx = null; }
+  };
+  const playClick = () => {
+    initAudio();
+    if(!audioCtx) return;
+    const now = audioCtx.currentTime;
+
+    // --- Tonal body ---
+    const osc = audioCtx.createOscillator();
+    const oscGain = audioCtx.createGain();
+    const bp = audioCtx.createBiquadFilter();
+    osc.type = 'triangle';
+    osc.frequency.value = 1800; // higher pitch
+    bp.type = 'bandpass';
+    bp.frequency.value = 1800;
+    bp.Q.value = 6;
+    oscGain.gain.setValueAtTime(0.0001, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.09, now + 0.003);
+    oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+
+    // --- Short noise burst for 'click' texture ---
+    const len = Math.floor(audioCtx.sampleRate * 0.05);
+    const noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = noiseBuf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuf;
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'highpass';
+    noiseFilter.frequency.value = 1200;
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0.0001, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.06, now + 0.002);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+    // connect nodes
+    osc.connect(bp);
+    bp.connect(oscGain);
+    oscGain.connect(audioCtx.destination);
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+
+    // start / stop
+    osc.start(now); osc.stop(now + 0.06);
+    noise.start(now); noise.stop(now + 0.06);
+
+    // cleanup after nodes finish
+    setTimeout(() => {
+      try { osc.disconnect(); oscGain.disconnect(); bp.disconnect(); noise.disconnect(); noiseFilter.disconnect(); noiseGain.disconnect(); } catch(e){}
+    }, 200);
+  };
+
   // Event delegation for button clicks
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-calc');
     if(!btn) return;
+    playClick();
     const val = btn.dataset.value;
     const action = btn.dataset.action;
     if(action === 'clear') clearAll();
